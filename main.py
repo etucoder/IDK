@@ -1,6 +1,6 @@
 from flask import Flask, render_template_string
 import requests
-
+import os
 app = Flask(__name__)
 
 # The website you are trying to embed
@@ -50,5 +50,10 @@ def home():
         
     return render_template_string(HTML_TEMPLATE, embedded_html=site_markup)
 
+
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    # Render passes the correct port via the PORT environment variable (defaults to 10000)
+    port = int(os.environ.get("PORT", 10000))
+    # Must bind to 0.0.0.0 for Render to detect the active web server
+    app.run(host="0.0.0.0", port=port, debug=False)
+
