@@ -285,111 +285,111 @@ def read_root():
 """
     return HTMLResponse(content=html_content, status_code=200)
 
-@app.get("/connections")
-def read_root():
-    html_content = """
-            <!DOCTYPE html>
-<html>
-  <style>
-    iframe {
-      max-width : 100%;
-      max-height : 1000px;
-      width : 100%;
-      height : 1000px;
-    }
-    h1 {
-      font-family : 'Segoe UI',Tahoma,Geneva, Verdana, sans-serif;
-      font-size : 40px;
+# @app.get("/connections")
+# def read_root():
+#     html_content = """
+#             <!DOCTYPE html>
+# <html>
+#   <style>
+#     iframe {
+#       max-width : 100%;
+#       max-height : 1000px;
+#       width : 100%;
+#       height : 1000px;
+#     }
+#     h1 {
+#       font-family : 'Segoe UI',Tahoma,Geneva, Verdana, sans-serif;
+#       font-size : 40px;
     
-    }
+#     }
 
-    h3 {
-      font-family : 'Segoe UI',Tahoma,Geneva, Verdana, sans-serif;
-
-    
-    }
-    .title-holder {
-      display : flex;
-      align-items : center;
-      justify-content : center;
-      flex : 1;
-      flex-direction : column;
-    }
-  </style>
-
-  <head>
-    <title>Connections</title>
-  </head>
-
-  <body>
-    <div class = "title-holder">
-      <h3 style = "margin : 5px;">(Unofficial)</h3>
-      <h1 style = "margin : 5px;">Connections</h1>
-    </div>
-    
-    <object
-      data = "https://connectionsplus.io/" 
-      style = "width : 1000px; height : 1000px;"
-    >
-
-    </object>
-  </body>
-</html>
-    """
-    return HTMLResponse(content=html_content, status_code=200)
-
-@app.get("/strands")
-def read_root():
-    html_content = """
-    <!DOCTYPE html>
-<html>
-  <style>
-    iframe {
-      max-width : 100%;
-      max-height : 1000px;
-      width : 100%;
-      height : 1000px;
-    }
-    h1 {
-      font-family : 'Segoe UI',Tahoma,Geneva, Verdana, sans-serif;
-      font-size : 40px;
-    
-    }
-
-    h3 {
-      font-family : 'Segoe UI',Tahoma,Geneva, Verdana, sans-serif;
+#     h3 {
+#       font-family : 'Segoe UI',Tahoma,Geneva, Verdana, sans-serif;
 
     
-    }
-    .title-holder {
-      display : flex;
-      align-items : center;
-      justify-content : center;
-      flex : 1;
-      flex-direction : column;
-    }
-  </style>
+#     }
+#     .title-holder {
+#       display : flex;
+#       align-items : center;
+#       justify-content : center;
+#       flex : 1;
+#       flex-direction : column;
+#     }
+#   </style>
 
-  <head>
-    <title>Connections</title>
-  </head>
+#   <head>
+#     <title>Connections</title>
+#   </head>
 
-  <body>
-    <div class = "title-holder">
-      <h3 style = "margin : 5px;">(Unofficial)</h3>
-      <h1 style = "margin : 5px;">Strands</h1>
-    </div>
+#   <body>
+#     <div class = "title-holder">
+#       <h3 style = "margin : 5px;">(Unofficial)</h3>
+#       <h1 style = "margin : 5px;">Connections</h1>
+#     </div>
     
-    <iframe
-      src = "https://strandsgame.net/" 
-    >
+#     <object
+#       data = "https://connectionsplus.io/" 
+#       style = "width : 1000px; height : 1000px;"
+#     >
 
-    </iframe>
-  </body>
-</html>
+#     </object>
+#   </body>
+# </html>
+#     """
+#     return HTMLResponse(content=html_content, status_code=200)
+
+# @app.get("/strands")
+# def read_root():
+#     html_content = """
+#     <!DOCTYPE html>
+# <html>
+#   <style>
+#     iframe {
+#       max-width : 100%;
+#       max-height : 1000px;
+#       width : 100%;
+#       height : 1000px;
+#     }
+#     h1 {
+#       font-family : 'Segoe UI',Tahoma,Geneva, Verdana, sans-serif;
+#       font-size : 40px;
+    
+#     }
+
+#     h3 {
+#       font-family : 'Segoe UI',Tahoma,Geneva, Verdana, sans-serif;
+
+    
+#     }
+#     .title-holder {
+#       display : flex;
+#       align-items : center;
+#       justify-content : center;
+#       flex : 1;
+#       flex-direction : column;
+#     }
+#   </style>
+
+#   <head>
+#     <title>Connections</title>
+#   </head>
+
+#   <body>
+#     <div class = "title-holder">
+#       <h3 style = "margin : 5px;">(Unofficial)</h3>
+#       <h1 style = "margin : 5px;">Strands</h1>
+#     </div>
+    
+#     <iframe
+#       src = "https://strandsgame.net/" 
+#     >
+
+#     </iframe>
+#   </body>
+# </html>
 
     
 
 
-    """
-    return HTMLResponse(content=html_content, status_code=200)
+#     """
+#     return HTMLResponse(content=html_content, status_code=200)
