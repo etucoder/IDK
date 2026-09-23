@@ -15,11 +15,23 @@ def read_root():
                 body {font-family : 'Segoe UI',Tahoma,Geneva, Verdana, sans-serif; background-color : #f3f4f6; display : flex;  min-height : 100vh; flex-direction : column; align-items : center;}
                 
                 .title { display : flex ; justify-content : center; font-size : 40px; margin-bottom : 40px}
+
+                .input-group button {
+                  padding : 5px;
+                  height : 40px;
+                  width : 80px;
+                  font-family : 'Segoe UI',Tahoma,Geneva, Verdana, sans-serif;
+                  font-size : 1rem;
+                  font-weight : 750;
+                  border-radius:  5px;
+                }
+
                 .card {
                     padding: 40px; 
                     background: white;
                     border-radius: 12px;
-                    max-width : 400px; 
+                    max-width : 600px; 
+                    width : 100%;
                     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
                     text-align: center;
                     overflow : hidden;
@@ -68,7 +80,27 @@ def read_root():
                 .hidden {
                   display : none !important;
                 }
+                
+                <!-- #hide-for-now : {
+                  display : none;
+                  
+                } -->
 
+                .play-button {
+                  width : 540px;
+                  height: 60px;
+                  font-size : 24px;
+                  font-weight : 1000;
+                  border-radius : 6px;
+                  border : 3px solid ;
+                  margin : 10px;
+                }
+
+                .play-div {
+                  display : flex;
+                  flex-direction : column;
+                  margin : 20px;
+                }
                 .credentials { display : flex ; align-items:center; justify-content : center; flex-direction : column;}
                 .input-group {display : flex; align-items: center; margin-bottom : 6px}
                 .credentials form {width : 300px}
@@ -76,7 +108,7 @@ def read_root():
                 .sign-up {display : flex; align-items : center; width: 300px; flex-direction : column;}
                 .sign-up button {background : none; border : none; text-decoration : underline; color : blue;}
                 label {width : 90px; text-align :left;}
-                input {flex : 1; padding : 3px ; border : 1px solid #000000; }
+                input {flex : 1; padding : 3px ; border : 1px solid #000000;  }
                 .FAQs {max-width : 100%; width : 100%;}
                 .FAQs details {margin-top : 6px; margin-bottom : 3px;  width : 100%; font-size : 24px;}
                 .FAQs p {margin : 12px; font-size : 18px;}
@@ -113,7 +145,11 @@ def read_root():
             <div class="title" style="">
                 <h1>Welcome to IDK</h1>
             </div>
-            <div class = "card">
+            <div class = "play-div">
+              <button href = "/strands" class = "play-button" style = "background-color : #eafa07;"> Play Strands </button>
+              <button class = "play-button" style = "background-color : #ca23fc" > Play Connections </button>
+            </div>
+            <div href = "/connections" class = "card" id = "hide-for-now" style = "display : none;">
               <div class = "tab-header">
                 <button type= "button" class = "tab-btn active" id = "login-tab" onclick = "switchTab('login')">Log In</button>
                 <button type= "button" class = "tab-btn active" id = "signup-tab" onclick = "switchTab('signup')">Sign Up</button>
@@ -174,7 +210,7 @@ def read_root():
             <div class = "card" style = "margin-top : 20px ; max-width : 800px; width : 100%;">
               <div class = "FAQs">
                 <h2>FAQ's and Important Information</h2>
-                <details>
+                <!-- <details>
                   <summary>How do I sign up?</summary>
                   <p>Go to the Sign Up page by clicking the link or scrolling down.Then, enter a unique username and a password and click "Sign Up".</p>
 
@@ -203,7 +239,7 @@ def read_root():
                 <details>
                   <summary>What if I forgot my username?</summary>
                   <p>First of all, how do you even? Second of all, just ask your friends what it is??</p>
-                </details>
+                </details> -->
 
                 <details>
                   <summary>Why is it called IDK?</summary>
@@ -234,7 +270,113 @@ def read_root():
               
               </div>
             </div>
+
+          
         </body>
     </html>
+    """
+    return HTMLResponse(content=html_content, status_code=200)
+@app.get("/strands")
+def read_root():
+    html_content = """
+            <!DOCTYPE html>
+            <html>
+            <style>
+                iframe {
+                max-width : 100%;
+                max-height : 1000px;
+                width : 100%;
+                height : 1000px;
+                }
+                h1 {
+                font-family : 'Segoe UI',Tahoma,Geneva, Verdana, sans-serif;
+                font-size : 40px;
+                
+                }
+
+                h3 {
+                font-family : 'Segoe UI',Tahoma,Geneva, Verdana, sans-serif;
+
+                
+                }
+                .title-holder {
+                display : flex;
+                align-items : center;
+                justify-content : center;
+                flex : 1;
+                flex-direction : column;
+                }
+            </style>
+
+            <head>
+                <title>Connections</title>
+            </head>
+
+            <body>
+                <div class = "title-holder">
+                <h3 style = "margin : 5px;">(Unofficial)</h3>
+                <h1 style = "margin : 5px;">Strands</h1>
+                </div>
+                
+                <iframe
+                src = "https://strandsgame.net/" 
+                >
+
+                </iframe>
+            </body>
+            </html>
+
+    """ 
+    return HTMLResponse(content=html_content, status_code=200)
+
+@app.get("/connections")
+def read_root():
+    html_content = """
+            <!DOCTYPE html>
+            <html>
+            <style>
+                iframe {
+                max-width : 100%;
+                max-height : 1000px;
+                width : 100%;
+                height : 1000px;
+                }
+                h1 {
+                font-family : 'Segoe UI',Tahoma,Geneva, Verdana, sans-serif;
+                font-size : 40px;
+                
+                }
+
+                h3 {
+                font-family : 'Segoe UI',Tahoma,Geneva, Verdana, sans-serif;
+
+                
+                }
+                .title-holder {
+                display : flex;
+                align-items : center;
+                justify-content : center;
+                flex : 1;
+                flex-direction : column;
+                }
+            </style>
+
+            <head>
+                <title>Connections</title>
+            </head>
+
+            <body>
+                <div class = "title-holder">
+                <h3 style = "margin : 5px;">(Unofficial)</h3>
+                <h1 style = "margin : 5px;">Connections</h1>
+                </div>
+                
+                <iframe
+                src = "https://connectionsplus.io/game/1199" 
+                >
+
+                </iframe>
+            </body>
+            </html>
     """
     return HTMLResponse(content=html_content, status_code=200)
