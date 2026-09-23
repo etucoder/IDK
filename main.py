@@ -602,7 +602,7 @@ def read_root():
                 </div>
                 
                 <iframe
-                src = "https://connectionsplus.io/game/1199" 
+                src = "https://connectionsplus.io/" 
                 >
 
                 </iframe>
