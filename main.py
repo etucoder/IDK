@@ -1,289 +1,112 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
-
+from fastapi.templating import Jinja2Templates
+import csv
+from flask import Flask, request, jsonify
+import requests
+import random
+from pydantic import BaseModel
 app = FastAPI() 
 
-@app.get("/")
-def read_root():
-    html_content = """
-    <!DOCTYPE html>
-    <html>
-        <head>
-            <title>Render Python Test</title>
-            <style>
-                * {box-sizing : border-box; margin : 0; padding : 0;}
-                body {font-family : 'Segoe UI',Tahoma,Geneva, Verdana, sans-serif; background-color : #f3f4f6; display : flex;  min-height : 100vh; flex-direction : column; align-items : center;}
+
+templates = Jinja2Templates(directory="templates")
+templates.env.cache = None
+
+SHEET_ID = "1xM-GG4u16PiTrxSJQWZnX4Iiqh36ROobzcFGBKiRPIA"
+SHEET_URL = "https://docs.google.com/spreadsheets/d/1xM-GG4u16PiTrxSJQWZnX4Iiqh36ROobzcFGBKiRPIA/export?format=csv"
+
+cached_words = []
+last_seen_tag = None
+categories = []
+
+def get_current_connections_from_sheet():
+    global cached_words, last_seen_tag, categories
+
+    try :
+      header_check = requests.head(SHEET_URL)
+      current_etag = header_check.headers.get("ETag")
+
+      if cached_words and (current_etag == last_seen_tag):
+        return cached_words
+
+      print("Sheet changed. Updating...")
+
+      response = requests.get(SHEET_URL)
+      response.raise_for_status()
+
+      lines = response.text.splitlines()
+      reader = csv.reader(lines)
+
+      words = []
+      categories = []
+      for row in reader:
+         for cell in row:
+            if cell.strip():
+               if words.__len__() <= 15:
+                words.append(cell.strip())
+               else:
+                categories.append(cell.strip())
                 
-                .title { display : flex ; justify-content : center; font-size : 40px; margin-bottom : 40px}
 
-                .input-group button {
-                  padding : 5px;
-                  height : 40px;
-                  width : 80px;
-                  font-family : 'Segoe UI',Tahoma,Geneva, Verdana, sans-serif;
-                  font-size : 1rem;
-                  font-weight : 750;
-                  border-radius:  5px;
-                }
+      if words:
+        cached_words = words
+        last_seen_tag = current_etag
 
-                .card {
-                    padding: 40px; 
-                    background: white;
-                    border-radius: 12px;
-                    max-width : 600px; 
-                    width : 100%;
-                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-                    text-align: center;
-                    overflow : hidden;
-                    }
+      return cached_words
+    except Exception as e :
+      print(e)
 
-                .tab-header {
-                  display : flex;
-                  border-bottom : 1px solid #e5e7eb;
-                  background-color : #f9fafb;
-                  width : 100%;
-                }
+get_current_connections_from_sheet()
+print(cached_words)
+@app.get("/",response_class=HTMLResponse)
+def read_root(request : Request):
 
-                .tab-btn {
-                  flex : 1;
-                  padding : 14px;
-                  border: none;
-                  background : none;
-                  font-size : 1rem;
-                  font-weight : 600;
-                  color : #6b7280;
-                  cursor : pointer;
-                  transition : all 0.2s ease;
-                }
+    return templates.TemplateResponse(request = request, name = "index.html")
 
 
-                .tab-btn:hover {
-                  color : #4F46E5;
-                  background-color : #f3f4f6;
-                }
+actual_words = cached_words.copy()
+print(actual_words)
+correct_groups = {"1" : [actual_words[0],actual_words[1],actual_words[2],actual_words[3]],"2" : [actual_words[4],actual_words[5],actual_words[6],actual_words[7]],"3" : [actual_words[8],actual_words[9],actual_words[10],actual_words[11]],"4" : [actual_words[12],actual_words[13],actual_words[14],actual_words[15]]}
+random.shuffle(cached_words)
+print(cached_words)
+print(categories)
+print(correct_groups)
+words_are_matching = False
+def check_correct_answers(words_chosen : list) -> dict[str,list[str]]:
+  global words_are_matching, correct_groups
+  for category_num, answers in correct_groups.items(): 
+    print(correct_groups.items())
+    print(f"Category Num : {int(category_num) - 1}, Answers : {answers}")
+    words_are_matching = True
+    for word in words_chosen:
+      if word in answers:
+        pass
+      else:
+        words_are_matching = False
+    if words_are_matching:
+      print(f"Words: {words_chosen}, Answers : {answers}, Category : {categories[int(category_num) - 1]}")
+      return {"category" : categories[(int(category_num) - 1)], "answers" : answers, "id" : int(category_num)}
 
-                .tab-btn:active {
-                  color : #4F46E5;
-                  background-color : #ffffff;
-                  border-bottom : 3px solid #4F46E5
-
-                }
-                
-                .card-content {
-                  padding : 30px;
-                }
-
-                .form-panel {
-                  display : block;
-                }
-              
-                .hidden {
-                  display : none !important;
-                }
-                
-                <!-- #hide-for-now : {
-                  display : none;
-                  
-                } -->
-
-                .play-button {
-                  width : 540px;
-                  height: 60px;
-                  font-size : 24px;
-                  font-weight : 1000;
-                  border-radius : 6px;
-                  border : 3px solid ;
-                  margin : 10px;
-                }
-
-                .play-div {
-                  display : flex;
-                  flex-direction : column;
-                  margin : 20px;
-                }
-                .credentials { display : flex ; align-items:center; justify-content : center; flex-direction : column;}
-                .input-group {display : flex; align-items: center; margin-bottom : 6px}
-                .credentials form {width : 300px}
-                .credentials button {flex : 1;}
-                .sign-up {display : flex; align-items : center; width: 300px; flex-direction : column;}
-                .sign-up button {background : none; border : none; text-decoration : underline; color : blue;}
-                label {width : 90px; text-align :left;}
-                input {flex : 1; padding : 3px ; border : 1px solid #000000;  }
-                .FAQs {max-width : 100%; width : 100%;}
-                .FAQs details {margin-top : 6px; margin-bottom : 3px;  width : 100%; font-size : 24px;}
-                .FAQs p {margin : 12px; font-size : 18px;}
-                h1 { color: #4F46E5; }
-            </style>
+  return {}
 
 
 
-            <script>
-              function switchTab(tabName){
-                const loginTab = document.getElementById('login-tab');
-                const signupTab = document.getElementById('signup-tab');
-                const loginPanel = document.getElementById('login-panel');
-                const signupPanel = document.getElementById('signup-panel');
 
-                loginTab.classList.remove('active');
-                signupTab.classList.remove('active');
-                loginPanel.classList.add('hidden');
-                signupPanel.classList.add('hidden');
+class GuessRequest(BaseModel):
+  words : list[str]
 
-                if (tabName === 'login') {
-                  loginTab.classList.add('active');
-                  loginPanel.classList.remove('hidden');
-                } else if (tabName === 'signup') {
-                  signupTab.classList.add('active');
-                  signupPanel.classList.remove('hidden');
-                }
-                
-              }
-            
-            </script>
-        </head>
-        <body>
-            <div class="title" style="">
-                <h1>Welcome to IDK</h1>
-            </div>
-            <div class = "play-div">
-              <a href= "/strands">
-                <button  class = "play-button" style = "background-color : #eafa07;"> Play Strands </button>
-              </a>
+@app.post("/check_guess")
+def check_guess(request_data : GuessRequest):
 
-              <a href = "/connections">
-                <button class = "play-button" style = "background-color : #ca23fc" > Play Connections </button>
-              </a>
-            </div>
-            <div href = "/connections" class = "card" id = "hide-for-now" style = "display : none;">
-              <div class = "tab-header">
-                <button type= "button" class = "tab-btn active" id = "login-tab" onclick = "switchTab('login')">Log In</button>
-                <button type= "button" class = "tab-btn active" id = "signup-tab" onclick = "switchTab('signup')">Sign Up</button>
-              </div>
-              <div  class = "card-content">
-                
-                <div id = "login-panel" class = "form-panel">
+  words_chosen = request_data.words
 
-                  <div class = "credentials">
-                    <h2 style = "margin-bottom : 10px">Login to IDK</h2>
-                    <form action="submit-credentials" method = "POST">
-                      <div class = "input-group">
-                        <label for="username-input">Username : </label>
-                        <input type = "text" id = "username-input" name = "username">
-                      </div>
-                      
-                      <div class = "input-group">
-                        <label for="password-input">Password: </label>
-                        <input type = "password" id = "password-input" name = "password">
-                      </div>
+  result = check_correct_answers(words_chosen)
 
-                      <div class = "input-group">
-                        <button>Login</button>
-                      </div>
-                    </form>
+  return result
 
-                    <div class = "sign-up" >
-                      <p>Forgot your password? Too bad...</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div id = "signup-panel" class = "form-panel hidden">
-
-                  <div class = "credentials">
-                    <h2 style = "margin-bottom : 10px">Sign Up to IDK</h2>
-                    <form action="add-credentials" method = "POST">
-                      <div class = "input-group">
-                        <label for="username-input">Username : </label>
-                        <input type = "text" id = "username-input" name = "username">
-                      </div>
-                      
-                      <div class = "input-group">
-                        <label for="password-input">Password: </label>
-                        <input type = "password" id = "password-input" name = "password">
-                      </div>
-
-                      <div class = "input-group">
-                        <button>Login</button>
-                      </div>
-                    </form>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-            </div>
-            <div class = "card" style = "margin-top : 20px ; max-width : 800px; width : 100%;">
-              <div class = "FAQs">
-                <h2>FAQ's and Important Information</h2>
-                <!-- <details>
-                  <summary>How do I sign up?</summary>
-                  <p>Go to the Sign Up page by clicking the link or scrolling down.Then, enter a unique username and a password and click "Sign Up".</p>
-
-                </details>
-
-                <details>
-                  <summary>What is the difference between a DM and a Group Chat?</summary>
-                  <p>A DM (Direct Message) allows you to communicate with 1 person only. You cannot add or remove anyone from a DM. A Group chat allows 3+ people to communicate. You can leave or add people to a group chat freely.</p>
-                </details>
-
-                <details>
-                  <summary>How do I join a IDK Group Chat?</summary>
-                  <p>To join a IDK Group Chat, first find out the name and type of the group chat. If the type of the group chat is public , search for the group chat and click 'join'. If the type is 'Join with code', ask any of the members for the join code. If the type is invite only, ask for a invite and then click 'Accept' when one of the managers sends it to you.</p>
-                </details>
-
-                <details>
-                  <summary>How does IDK work?</summary>
-                  <p>IDK uses a Render URL to host the frontend, or the page you are seeing right now. It uses Supabase (A SQL Database) to hold your information securly even when you exit the website , and to be able to show your message to other people</p>
-                </details>
-
-                <details>
-                  <summary>What if I forgot my password?</summary>
-                  <p>IDK does not store passwords in plain text for security reasons, so I cannot find your password in the database. I also did not implement a email recovery system so just remember your password.</p>
-                </details>
-
-                <details>
-                  <summary>What if I forgot my username?</summary>
-                  <p>First of all, how do you even? Second of all, just ask your friends what it is??</p>
-                </details> -->
-                <details>
-                  <summary>How was IDK created?</summary>
-                  <p>IDK was created using a mix of Python (Site hosting and changing), HTML (Web Content), and CSS (Styling) </p>
-                </details>
-                <details>
-                  <summary>Why is it called IDK?</summary>
-                  <p>IDK.</p>
-                </details>
-
-                <details>
-                  <summary>Why does this exist?</summary>
-                  <p>Because I was bored...</p>
-                </details>
-
-                <details>
-                  <summary>Should I use this?</summary>
-                  <p>IDK, that's up to you.</p>
-                </details>
-
-                <details>
-                  <summary>Can I request features?</summary>
-                  <p>Can you? Yes. Will they be added? Maybe. Do I have the time or budget to add the entirety of YouTube or whatever you think of on here? No.</p>
-                </details>
-
-
-                <details>
-                  <summary>Don't click this</summary>
-                  <p>It can't be that interesting...</p>
-                </details>
-
-              
-              </div>
-            </div>
-
-          
-        </body>
-    </html>
-"""
-    return HTMLResponse(content=html_content, status_code=200)
+@app.get("/connections")
+def read_root(request : Request):
+    return templates.TemplateResponse(request = request, name = "connections.html", context = {"words" : cached_words})
 
 # @app.get("/connections")
 # def read_root():

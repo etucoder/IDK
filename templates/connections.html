@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Render Python Test</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f3f4f6;
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .title {
+            display: flex;
+            justify-content: center;
+            font-size: 40px;
+            margin-bottom: 40px
+        }
+
+
+
+        .input-group button {
+            padding: 5px;
+            height: 40px;
+            width: 80px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 1rem;
+            font-weight: 750;
+            border-radius: 5px;
+        }
+
+        .card {
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+            max-width: 100%;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            overflow: hidden;
+            justify-content: center;
+            display: flex;
+        }
+
+        .tab-header {
+            display: flex;
+            border-bottom: 1px solid #e5e7eb;
+            background-color: #f9fafb;
+            width: 100%;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+
+        .tab-btn:hover {
+            color: #4F46E5;
+            background-color: #f3f4f6;
+        }
+
+        .tab-btn:active {
+            color: #4F46E5;
+            background-color: #ffffff;
+            border-bottom: 3px solid #4F46E5
+        }
+
+        .card-content {
+            padding: 30px;
+        }
+
+        .form-panel {
+            display: block;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .play-button {
+            width: 540px;
+            height: 60px;
+            font-size: 24px;
+            font-weight: 1000;
+            border-radius: 6px;
+            border: 3px solid;
+            margin: 10px;
+        }
+
+        .play-div {
+            display: flex;
+            flex-direction: column;
+            margin: 20px;
+        }
+
+        .credentials {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 6px
+        }
+
+        .credentials form {
+            width: 300px
+        }
+
+        .credentials button {
+            flex: 1;
+        }
+
+        .sign-up {
+            display: flex;
+            align-items: center;
+            width: 300px;
+            flex-direction: column;
+        }
+
+        .sign-up button {
+            background: none;
+            border: none;
+            text-decoration: underline;
+            color: blue;
+        }
+
+        label {
+            width: 90px;
+            text-align: left;
+        }
+
+        input {
+            flex: 1;
+            padding: 3px;
+            border: 1px solid #000000;
+        }
+
+        .FAQs {
+            max-width: 100%;
+            width: 100%;
+        }
+
+        .FAQs details {
+            margin-top: 6px;
+            margin-bottom: 3px;
+            width: 100%;
+            font-size: 24px;
+        }
+
+        .FAQs p {
+            margin: 12px;
+            font-size: 18px;
+        }
+
+        h1 {
+            color: #4F46E5;
+        }
+
+        .button-row button {
+            margin: 20px;
+            width: 160px;
+            height: 80px;
+            border-radius: 50px;
+            font: "Franklin Gothic Medium";
+            font-size: 20px;
+            font-weight: 700;
+            border: 2px solid;
+            background-color: #ffffff
+        }
+
+        .button-row button:hover {
+            cursor: pointer;
+            background-color: #e0e0e0
+        }
+
+        .row button {
+            width: 225px;
+            height: 90px;
+            margin: 15px;
+            border-radius: 5px;
+            border: none;
+            font: "Franklin Gothic Medium";
+            font-size: 20px;
+            font-weight: 800;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+
+        .row button:hover {
+            background-color: #e0e0e0;
+            cursor: pointer;
+        }
+
+        .row button.active {
+            background-color: #454545;
+            color: white;
+        }
+
+        .button-row button.inactive {
+            border: 2px solid gray;
+            color: gray;
+        }
+
+        .row.solved-banner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 975px;
+            height: 90px;
+            margin: 15px auto;
+            border-radius: 5px;
+            font-family: 'Franklin Gothic Medium', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #000000;
+        }
+
+        .life {
+            width: 20px;
+            height: 20px;
+            background-color: #404040;
+            margin: 8px;
+            border-radius: 50%
+        }
+
+        .lives-row {
+            margin: 15px;
+            max-width: 1000px;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+    </style>
+
+
+
+
+</head>
+
+<body>
+    <div class="card" style=>
+        <div id="grid">
+            <div class="row" id="row-1">
+                <button>{{ words[0] }}</button>
+                <button>{{ words[1] }}</button>
+                <button>{{ words[2] }}</button>
+                <button>{{ words[3] }}</button>
+            </div>
+
+            <div class="row" id="row-2">
+                <button>{{words[4]}}</button>
+                <button>{{words[5]}}</button>
+                <button>{{words[6]}}</button>
+                <button>{{words[7]}}</button>
+            </div>
+
+            <div class="row" id="row-3">
+                <button>{{words[8]}}</button>
+                <button>{{words[9]}}</button>
+                <button>{{words[10]}}</button>
+                <button>{{words[11]}}</button>
+            </div>
+
+            <div class="row" id="row-4">
+                <button>{{words[12]}}</button>
+                <button>{{words[13]}}</button>
+                <button>{{words[14]}}</button>
+                <button>{{words[15]}}</button>
+            </div>
+
+            <div class="lives-row">
+                <h3 style="margin : 3px; font-weight : 400;">Mistakes Remaining: </h3>
+                <div class="life" id="life-1"></div>
+                <div class="life" id="life-1"></div>
+                <div class="life" id="life-1"></div>
+                <div class="life" id="life-1"></div>
+            </div>
+
+            <div class="button-row">
+                <button id="shuffle">Shuffle</button>
+                <button id="deselect" class="inactive" style="width : 200px;">Deselect All</button>
+                <button id="submit" class="inactive">Submit</button>
+
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+<script>
+    const MAX_ACTIVE = 4
+    const buttons = document.querySelectorAll(".row button");
+    const deSelectButton = document.getElementById("deselect")
+    const submitButton = document.getElementById("submit")
+    const shuffleButton = document.getElementById('shuffle')
+    const solvedCategories = [];
+    const connectionColors = [
+        { bg: "#F9DF6D", text: "#000000" }, // yellow
+        { bg: "#A0C35A", text: "#000000" }, // green
+        { bg: "#B0C4EF", text: '#000000' }, // blue
+        { bg: "#BA80C8", text: '#000000' } // purple
+    ]
+
+
+    buttons.forEach(button => {
+        button.addEventListener('click', () => {
+            var activeButtons = document.querySelectorAll(".row button.active")
+            if (button.classList.contains('active')) {
+                button.classList.remove('active')
+            }
+
+            else if (activeButtons.length < MAX_ACTIVE) {
+                button.classList.add('active')
+            }
+            activeButtons = document.querySelectorAll(".row button.active")
+            if (activeButtons.length === 0) {
+
+                deSelectButton.classList.add('inactive');
+            } else {
+                deSelectButton.classList.remove('inactive');
+            }
+
+            if (activeButtons.length === 4) {
+                submitButton.classList.remove('inactive');
+            } else {
+                submitButton.classList.add('inactive')
+            }
+
+        });
+    });
+
+    deSelectButton.addEventListener('click', () => {
+        submitButton.classList.add('inactive')
+        buttons.forEach(button => {
+            if (button.classList.contains('active')) {
+                button.classList.remove('active');
+            }
+        }
+
+        )
+
+    });
+
+    shuffleButton.addEventListener('click', () => {
+        const allButtons = Array.from(document.querySelectorAll(".row:not(.solved-banner) button"))
+
+        for (let i = allButtons.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [allButtons[i], allButtons[j]] = [allButtons[j], allButtons[i]];
+        }
+
+        const rows = document.querySelectorAll(".row:not(.solved-banner)");
+
+        rows.forEach((row, rowIndex) => {
+            row.innerHTML = ""
+            for (let i = 0; i < 4; i++) {
+                const buttonIndex = (rowIndex * 4) + i
+                row.appendChild(allButtons[buttonIndex])
+            }
+        });
+
+    }
+    );
+
+    submitButton.addEventListener('click', () => {
+        const activeButtons = document.querySelectorAll(".row button.active")
+        // If somehow they send it with less than 4 selected, immediatly flag it as wrong and return
+        if (activeButtons.length !== 4) return;
+        const chosenWords = Array.from(activeButtons).map(btn => btn.innerText.trim())
+
+        fetch('/check_guess', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ words: chosenWords })
+        })
+
+
+            .then(response => response.json())
+            .then(data => {
+                if (Object.keys(data).length === 0) {
+                    alert("Incorrect! Try again.");
+
+                    buttons.forEach(btn => btn.classList.remove('active'));
+                    submitButton.classList.add('inactive');
+                    deSelectButton.classList.add('inactive');
+                } else {
+                    const categoryName = data.category;
+                    const correctAnswers = data.answers;
+                    const category_id = data.id;
+
+                    const currentOrder = solvedCategories.length;
+                    const colorScheme = connectionColors[category_id - 1] || { bg: "#BA80C8", text: "#000000" };
+                    alert('Correct!');
+
+                    solvedCategories.push({
+                        name: categoryName,
+                        answers: correctAnswers,
+                        color: colorScheme
+                    });
+
+                    activeButtons.forEach(btn => btn.remove());
+
+                    updateGridLayout()
+
+                    submitButton.classList.add('inactive');
+                    deSelectButton.classList.add('inactive');
+
+
+                }
+
+            })
+            .catch(error => {
+                alert(error)
+            })
+
+    });
+
+    function updateGridLayout() {
+        const cardElement = document.querySelector('.card');
+        const gridElement = document.getElementById('grid');
+        const buttonRow = document.querySelector('.button-row')
+
+        const remainingButtons = Array.from(document.querySelectorAll(".row button:not(.active)"))
+
+        gridElement.innerHTML = ""
+
+        solvedCategories.forEach(solved => {
+            const banner = document.createElement("div");
+            banner.className = "row solved-banner"
+            banner.style.backgroundColor = solved.color.bg
+            banner.style.color = solved.color.text
+
+            banner.innerHTML = `<div style ="text-align: center;"> <div style = "font-weight: 900; letter-spacing : 1px; font-size : 20px;"> ${solved.name} </div> <div style = "font-size : 16px; font-weight : 500; margin-top : 4px;"> ${solved.answers.join(", ")} </div> </div>`;
+
+            gridElement.appendChild(banner);
+        });
+
+        let currentIndex = 0;
+        const remainingRowsCount = Math.ceil(remainingButtons.length / 4)
+
+        for (let r = 0; r < remainingRowsCount; r++) {
+            const rowDiv = document.createElement('div');
+            rowDiv.className = "row";
+            rowDiv.id = `row-${solvedCategories.length + r + 1}`;
+
+            for (let i = 0; i < 4; i++) {
+                const rowDiv = document.createElement("div");
+                rowDiv.className = "row";
+                rowDiv.id = `row-${solvedCategories.length + r + 1}`;
+
+                for (let i = 0; i < 4; i++) {
+                    if (remainingButtons[currentIndex]) {
+                        rowDiv.appendChild(remainingButtons[currentIndex]);
+                        currentIndex++;
+                    }
+                }
+                gridElement.appendChild(rowDiv);
+
+
+            }
+        }
+
+        gridElement.appendChild(buttonRow)
+    }
+
+
+</script>
+
+</html>
