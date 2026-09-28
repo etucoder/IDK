@@ -4,6 +4,75 @@
 <head>
     <title>Render Python Test</title>
     <style>
+        .persistant-share-button {
+            font: "Franklin Gothic Medium";
+            color: #ffffff;
+            background-color: #26c743;
+            width: 250px;
+            height: 50px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: 800;
+            border: 2px solid;
+            margin-top: -20px;
+        }
+
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            z-index: 2000;
+        }
+
+        .modal-box {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 100%px;
+            width: 33%;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 900;
+            margin-bottom: 15px;
+        }
+
+        .share-emoji-grid {
+            font-size: 24px;
+            font-weight: 900;
+            margin-bottom: 15px;
+        }
+
+        .modal-box button {
+            background-color: #000000;
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.1s;
+        }
+
+        .modal-box button:hover {
+            background-color: #333333;
+        }
+
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -12,9 +81,13 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f3f4f6;
+            background-color: #ffffff;
             display: flex;
             min-height: 100vh;
+            width: 100vw;
+            margin: 0;
+            padding: 20px;
+            overflow-x: hidden;
             flex-direction: column;
             align-items: center;
         }
@@ -39,17 +112,17 @@
         }
 
         .card {
-            padding: 40px;
-            background: white;
-            border-radius: 12px;
-            max-width: 100%;
-            width: 100%;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 0px;
+            margin: 0;
+            justify-content: center;
+            background: none;
             text-align: center;
             overflow: hidden;
-            justify-content: center;
-            display: flex;
+            box-shadow: none;
+            width: 100%;
         }
+
+
 
         .tab-header {
             display: flex;
@@ -247,11 +320,39 @@
 
         .lives-row {
             margin: 15px;
-            max-width: 1000px;
+            max-width: 100%;
             width: 100%;
             display: flex;
             flex-direction: row;
             justify-content: center;
+        }
+
+        .life.deleted {
+            display: none;
+        }
+
+        .nonification-container {
+            position: absolute;
+            width: 400px;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #000000;
+            color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 1rem;
+            box-shadow: none;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            pointer-events: none;
+        }
+
+        .nonification-container.show {
+            opacity: 1;
+            transform: translate(-50%, 5px);
         }
     </style>
 
@@ -261,52 +362,53 @@
 </head>
 
 <body>
-    <div class="card" style=>
-        <div id="grid">
-            <div class="row" id="row-1">
-                <button>{{ words[0] }}</button>
-                <button>{{ words[1] }}</button>
-                <button>{{ words[2] }}</button>
-                <button>{{ words[3] }}</button>
-            </div>
+    <div class="card" style="position : relative; margin : 80px; ">
+        <div class="nonification-container" id="nonification"></div>
+        <div id="grid" ">
+            <div class=" row" id="row-1">
+            <button>{{ words[0] }}</button>
+            <button>{{ words[1] }}</button>
+            <button>{{ words[2] }}</button>
+            <button>{{ words[3] }}</button>
+        </div>
 
-            <div class="row" id="row-2">
-                <button>{{words[4]}}</button>
-                <button>{{words[5]}}</button>
-                <button>{{words[6]}}</button>
-                <button>{{words[7]}}</button>
-            </div>
+        <div class="row" id="row-2">
+            <button>{{words[4]}}</button>
+            <button>{{words[5]}}</button>
+            <button>{{words[6]}}</button>
+            <button>{{words[7]}}</button>
+        </div>
 
-            <div class="row" id="row-3">
-                <button>{{words[8]}}</button>
-                <button>{{words[9]}}</button>
-                <button>{{words[10]}}</button>
-                <button>{{words[11]}}</button>
-            </div>
+        <div class="row" id="row-3">
+            <button>{{words[8]}}</button>
+            <button>{{words[9]}}</button>
+            <button>{{words[10]}}</button>
+            <button>{{words[11]}}</button>
+        </div>
 
-            <div class="row" id="row-4">
-                <button>{{words[12]}}</button>
-                <button>{{words[13]}}</button>
-                <button>{{words[14]}}</button>
-                <button>{{words[15]}}</button>
-            </div>
+        <div class="row" id="row-4">
+            <button>{{words[12]}}</button>
+            <button>{{words[13]}}</button>
+            <button>{{words[14]}}</button>
+            <button>{{words[15]}}</button>
+        </div>
 
-            <div class="lives-row">
-                <h3 style="margin : 3px; font-weight : 400;">Mistakes Remaining: </h3>
-                <div class="life" id="life-1"></div>
-                <div class="life" id="life-1"></div>
-                <div class="life" id="life-1"></div>
-                <div class="life" id="life-1"></div>
-            </div>
+        <div class="lives-row">
+            <h3 style="margin : 3px; font-weight : 400;">Mistakes Remaining: </h3>
+            <div class="life" id="life-1"></div>
+            <div class="life" id="life-2"></div>
+            <div class="life" id="life-3"></div>
+            <div class="life" id="life-4"></div>
+        </div>
 
-            <div class="button-row">
-                <button id="shuffle">Shuffle</button>
-                <button id="deselect" class="inactive" style="width : 200px;">Deselect All</button>
-                <button id="submit" class="inactive">Submit</button>
-
-            </div>
+        <div class="button-row">
+            <button id="shuffle">Shuffle</button>
+            <button id="deselect" class="inactive" style="width : 200px;">Deselect All</button>
+            <button id="submit" class="inactive">Submit</button>
 
         </div>
+
+    </div>
     </div>
 
 </body>
@@ -314,10 +416,15 @@
 <script>
     const MAX_ACTIVE = 4
     const buttons = document.querySelectorAll(".row button");
-    const deSelectButton = document.getElementById("deselect")
-    const submitButton = document.getElementById("submit")
-    const shuffleButton = document.getElementById('shuffle')
+    const deSelectButton = document.getElementById("deselect");
+    const submitButton = document.getElementById("submit");
+    const shuffleButton = document.getElementById('shuffle');
     const solvedCategories = [];
+    const backendGroups = {{ correct_groups | tojson }};
+    var current_lives = 4;
+    let endGameOverlayInstance = null;
+    const guessHistoryEmojis = [];
+
     const connectionColors = [
         { bg: "#F9DF6D", text: "#000000" }, // yellow
         { bg: "#A0C35A", text: "#000000" }, // green
@@ -403,12 +510,60 @@
 
             .then(response => response.json())
             .then(data => {
-                if (Object.keys(data).length === 0) {
-                    alert("Incorrect! Try again.");
+
+                let emojiRow = ""
+                activeButtons.forEach(btn => {
+                    const text = btn.innerText.trim();
+
+                    if (backendGroups["1"].includes(text)) emojiRow += "🟨";
+                    else if (backendGroups["2"].includes(text)) emojiRow += "🟩";
+                    else if (backendGroups["3"].includes(text)) emojiRow += "🟦";
+                    else if (backendGroups["4"].includes(text)) emojiRow += "🟪";
+                });
+                guessHistoryEmojis.push(emojiRow);
+
+                if (data.status === "incorrect") {
+                    showNonification("Incorrect! Try again.");
 
                     buttons.forEach(btn => btn.classList.remove('active'));
                     submitButton.classList.add('inactive');
                     deSelectButton.classList.add('inactive');
+                    life_to_remove = ""
+                    if (current_lives === 1) {
+                        life_to_remove = document.getElementById('life-1')
+                        current_lives = 0
+                    } else if (current_lives === 2) {
+                        life_to_remove = document.getElementById('life-2')
+                        current_lives = 1
+                    } else if (current_lives === 3) {
+                        life_to_remove = document.getElementById('life-3')
+                        current_lives = 2
+                    } else if (current_lives === 4) {
+                        life_to_remove = document.getElementById('life-4')
+                        current_lives = 3
+                    }
+
+                    life_to_remove.classList.add('deleted')
+                    saveGameState()
+                } else if (data.status === "one_away") {
+                    showNonification("One Away!")
+                    life_to_remove = ""
+                    if (current_lives === 1) {
+                        life_to_remove = document.getElementById('life-1')
+                        current_lives = 0
+                    } else if (current_lives === 2) {
+                        life_to_remove = document.getElementById('life-2')
+                        current_lives = 1
+                    } else if (current_lives === 3) {
+                        life_to_remove = document.getElementById('life-3')
+                        current_lives = 2
+                    } else if (current_lives === 4) {
+                        life_to_remove = document.getElementById('life-4')
+                        current_lives = 3
+                    }
+
+                    life_to_remove.classList.add('deleted')
+                    saveGameState()
                 } else {
                     const categoryName = data.category;
                     const correctAnswers = data.answers;
@@ -416,7 +571,7 @@
 
                     const currentOrder = solvedCategories.length;
                     const colorScheme = connectionColors[category_id - 1] || { bg: "#BA80C8", text: "#000000" };
-                    alert('Correct!');
+                    showNonification('Correct!');
 
                     solvedCategories.push({
                         name: categoryName,
@@ -430,13 +585,23 @@
 
                     submitButton.classList.add('inactive');
                     deSelectButton.classList.add('inactive');
+                    saveGameState()
 
+                }
+
+                if (solvedCategories.length === 4) {
+                    setTimeout(() => { showEndGameScreen(true); }, 800);
+                }
+
+                if (current_lives === 0) {
+
+                    setTimeout(() => { showEndGameScreen(false); }, 800);
 
                 }
 
             })
             .catch(error => {
-                alert(error)
+                showNonification(error)
             })
 
     });
@@ -444,7 +609,8 @@
     function updateGridLayout() {
         const cardElement = document.querySelector('.card');
         const gridElement = document.getElementById('grid');
-        const buttonRow = document.querySelector('.button-row')
+        const buttonRow = document.querySelector('.button-row');
+        const livesRow = document.querySelector('.lives-row');
 
         const remainingButtons = Array.from(document.querySelectorAll(".row button:not(.active)"))
 
@@ -485,9 +651,147 @@
 
             }
         }
-
+        if (livesRow) {
+            gridElement.appendChild(livesRow)
+        }
         gridElement.appendChild(buttonRow)
+
     }
+
+    function showNonification(message) {
+        const nonification = document.getElementById("nonification")
+        nonification.innerText = message;
+        nonification.classList.add("show")
+        setTimeout(() => {
+            nonification.classList.remove("show");
+        }, 2000);
+    }
+
+    function saveGameState() {
+        const gameState = {
+            puzzleVersion: '{{ puzzle_id }}',
+            solved: solvedCategories,
+            currentLives: current_lives,
+            remainingWords: Array.from(document.querySelectorAll(".row:not(.solved-banner) button")).map(btn => btn.innerText.trim())
+        };
+
+        localStorage.setItem('connections_save', JSON.stringify(gameState));
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+        const savedData = localStorage.getItem('connections_save');
+
+        if (savedData) {
+            const parsedState = JSON.parse(savedData);
+
+            if (parsedState.puzzleVersion !== '{{ puzzle_id }}') {
+                localStorage.removeItem('connections_save');
+                return;
+            }
+            solvedCategories.push(...parsedState.solved);
+
+            current_lives = parsedState.currentLives;
+
+            for (let i = 4; i > current_lives; i--) {
+                const dot = document.getElementById(`life-${i}`)
+                if (dot) dot.style.backgroundColor = "transparent"
+                dot.classList.add('deleted')
+            }
+
+            const allSolvedWords = solvedCategories.flatMap(s => s.answers);
+            const buttons = document.querySelectorAll(".row button");
+
+            buttons.forEach(btn => {
+                if (allSolvedWords.includes(btn.innerText.trim())) {
+                    btn.remove();
+                }
+            })
+
+            updateGridLayout()
+            showNonification("Progress restored.")
+        }
+
+
+    }
+    )
+
+    function showEndGameScreen(didWin) {
+        if (endGameOverlayInstance) {
+            endGameOverlayInstance.style.display = "flex";
+            return;
+        }
+
+        // localStorage.removeItem('connections_save');
+        const cTitle = {{ title | tojson
+    }}
+    const cNumber = {{ number | tojson }}
+    const cVersion = {{ version | tojson }}
+    const cDate = {{ date | tojson }}
+
+    const overlay = document.createElement('div');
+    overlay.className = "modal-overlay";
+
+    const modal = document.createElement('div');
+    modal.className = "modal-box";
+
+    const title = document.createElement("div");
+    title.className = "modal-title";
+    title.innerText = "IDK Connections";
+
+    const gridDisplay = document.createElement("div");
+    gridDisplay.className = "share-emoji-grid";
+    gridDisplay.innerText = guessHistoryEmojis.join('\n');
+
+    const shareBtn = document.createElement("button");
+    shareBtn.innerText = "Copy Results";
+
+    const admireBtn = document.createElement("button");
+    admireBtn.innerText = "Admire Puzzle";
+    admireBtn.style.marginLeft = "10px";
+
+    const persistantShareBtn = document.createElement("button");
+    persistantShareBtn.innerText = "Share Results";
+    persistantShareBtn.className = "persistant-share-button";
+    persistantShareBtn.style.setProperty("display", "none", "important");
+    document.body.appendChild(persistantShareBtn)
+
+    shareBtn.addEventListener('click', () => {
+        const gameTitle = "IDK Connections\n";
+        const titleToShow = `Topic : "${cTitle}"\n`
+        const numberToShow = `IDK Connections ${cNumber}\n`
+        const versionToShow = `${cVersion}\n`
+        const dateToShow = `Date Created: ${cDate}\n`
+
+        const scoreString = didWin ? `Solved in ${guessHistoryEmojis.length} turns!\n` : `Nice Try!\n`;
+        const shareText = gameTitle + titleToShow + numberToShow + versionToShow + dateToShow + scoreString + "\n" + guessHistoryEmojis.join("\n")
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(shareText)
+                .then(() => { shareBtn.innerText = "Successfully Copied! (I think)"; })
+        } else {
+            alert("Copy Error : IDK...")
+        }
+
+    });
+
+    admireBtn.addEventListener('click', () => {
+        overlay.style.display = "none";
+        persistantShareBtn.style.setProperty("display", "block", "important");
+    })
+
+    persistantShareBtn.addEventListener('click', () => {
+        overlay.style.display = "flex";
+        persistantShareBtn.style.setProperty("display", "none", "important");
+    })
+    modal.appendChild(title);
+    modal.appendChild(gridDisplay);
+    modal.appendChild(shareBtn);
+    overlay.appendChild(modal);
+    modal.appendChild(admireBtn)
+    document.body.appendChild(overlay);
+    }
+
+
 
 
 </script>

@@ -18,9 +18,9 @@ SHEET_URL = "https://docs.google.com/spreadsheets/d/1xM-GG4u16PiTrxSJQWZnX4Iiqh3
 cached_words = []
 last_seen_tag = None
 categories = []
-
+other_info = []
 def get_current_connections_from_sheet():
-    global cached_words, last_seen_tag, categories
+    global cached_words, last_seen_tag, categories, other_info
 
     try :
       header_check = requests.head(SHEET_URL)
@@ -39,14 +39,16 @@ def get_current_connections_from_sheet():
 
       words = []
       categories = []
+      other_info = []
       for row in reader:
          for cell in row:
             if cell.strip():
                if words.__len__() <= 15:
                 words.append(cell.strip())
-               else:
+               elif categories.__len__() <= 3:
                 categories.append(cell.strip())
-                
+               else : 
+                 other_info.append(cell.strip())
 
       if words:
         cached_words = words
@@ -71,23 +73,33 @@ random.shuffle(cached_words)
 print(cached_words)
 print(categories)
 print(correct_groups)
+print(other_info)
 words_are_matching = False
+one_away_found = False
 def check_correct_answers(words_chosen : list) -> dict[str,list[str]]:
-  global words_are_matching, correct_groups
+  global words_are_matching, correct_groups, one_away_found
+  one_away_found = False
+
   for category_num, answers in correct_groups.items(): 
-    print(correct_groups.items())
-    print(f"Category Num : {int(category_num) - 1}, Answers : {answers}")
+
     words_are_matching = True
+    match_count = 0
     for word in words_chosen:
       if word in answers:
-        pass
+        match_count += 1
       else:
         words_are_matching = False
+
+
+    if match_count == 3:
+      one_away_found = True
+
     if words_are_matching:
       print(f"Words: {words_chosen}, Answers : {answers}, Category : {categories[int(category_num) - 1]}")
-      return {"category" : categories[(int(category_num) - 1)], "answers" : answers, "id" : int(category_num)}
-
-  return {}
+      return {"status" : "correct" ,"category" : categories[(int(category_num) - 1)], "answers" : answers, "id" : int(category_num)}
+    elif one_away_found:
+      return {"status" : "one_away"}
+  return {"status" : "incorrect"}
 
 
 
@@ -106,7 +118,9 @@ def check_guess(request_data : GuessRequest):
 
 @app.get("/connections")
 def read_root(request : Request):
-    return templates.TemplateResponse(request = request, name = "connections.html", context = {"words" : cached_words})
+    cached_words = get_current_connections_from_sheet()
+    puzzle_id = "".join(cached_words[:4]).replace(" ","")
+    return templates.TemplateResponse(request = request, name = "connections.html", context = {"words" : cached_words, "correct_groups" : correct_groups,"title" : other_info[0],"number" : other_info[1], "version" : other_info[2],"date" : other_info[3],"puzzle_id" : puzzle_id, "groups" : categories})
 
 # @app.get("/connections")
 # def read_root():
