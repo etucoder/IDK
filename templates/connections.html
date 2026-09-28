@@ -761,9 +761,9 @@
         const numberToShow = `IDK Connections ${cNumber}\n`
         const versionToShow = `${cVersion}\n`
         const dateToShow = `Date Created: ${cDate}\n`
-
+        const linkToShow = "\nCan you beat me? : https://idk-gpw6.onrender.com/connections\n"
         const scoreString = didWin ? `Solved in ${guessHistoryEmojis.length} turns!\n` : `Nice Try!\n`;
-        const shareText = gameTitle + titleToShow + numberToShow + versionToShow + dateToShow + scoreString + "\n" + guessHistoryEmojis.join("\n")
+        const shareText = gameTitle + titleToShow + linkToShow + '\n' + numberToShow + versionToShow + dateToShow + scoreString + "\n" + guessHistoryEmojis.join("\n")
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(shareText)
